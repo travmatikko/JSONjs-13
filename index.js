@@ -1,3 +1,5 @@
+// ВЕРНІТЬ МЕНІІІІ ГРОШІ БО ВАША ШКОЛА НІЧОМУ НЕ МОЖеНАВЧИТИ 0663036663 НЕХОЧУ ПРОДОВЖУВАТИ НАВЧАННЯ ПІДТРИМКИ НЕМА ВЧИТЕЛЬ НІЧОГО мЕНІ НЕ ПОЯСНИВ Я НЕ ЗРОЗУМІВ НІЧОГО
+
 // Завдання 1
 /**
  * Функція `complexConvert` отримує об'єкт з числовими значеннями і збільшує їх на 1.
@@ -6,6 +8,18 @@
  * Повертає - json дані в яких всі числові значення збільшено на 1.
  */
 function complexConvert(data) {
+  const obj = {};
+  const dataObject = JSON.parse(data);
+
+  for (const key in dataObject) {
+    const value = dataObject[key];
+    if (typeof value === "number") {
+      obj[key] = value + 1;
+    } else {
+      obj[key] = value;
+    }
+    return JSON.stringify(obj);
+  }
   // Створюємо новий порожній об'єкт для збереження результату.
   // Перетворюємо json дані в об'єкт та отримуємо всі ключі об'єкта.
   // Обходимо всі ключі та перевіряємо значення.
@@ -45,6 +59,27 @@ console.log(complexConvert(JSON.stringify(data)));
     params: Параметри URL у вигляді масиву пар [ключ, значення].
  */
 function manipulateUrl(url) {
+  const newUrl = new URL(url);
+
+  newUrl.protocol = "https";
+  newUrl.host = "newhost.com";
+  newUrl.searchParams.set("newParam", "newValue");
+  newUrl.searchParams.delete("oldParam");
+
+  const params = [];
+  for (const [key, value] of newUrl.searchParams) {
+    params.push([key, value]);
+  }
+
+  const result = {
+    href: newUrl.href,
+    protocol: newUrl.protocol,
+    host: newUrl.host,
+    pathname: newUrl.pathname,
+    search: newUrl.search,
+    params: params,
+  };
+  return result;
   // Створюємо новий об'єкт URL.
   // Змінюємо протокол URL на https.
   // Змінюємо хост URL на 'newhost.com'.
@@ -87,6 +122,15 @@ function searchParamsURL(url) {
   // Перебір кожного параметра пошуку з 'searchParams' та додавання їх до словника 'params'
   // Кожен 'param' - це масив, де [0] - ім'я параметра, а [1] - значення параметра
   // Повертаємо словник
+  const parsedUrl = new URL(url);
+  const searchParams = parsedUrl.searchParams;
+  const param = [];
+
+  for (const [key, value] of searchParams) {
+    param.push([key, value]);
+  }
+
+  return new Map(param);
 }
 
 console.log("Завдання: 3 ==============================");
@@ -118,6 +162,15 @@ function manipulateSearchParams(paramsObj, newUrl) {
   // Використовуючи метод 'keys' з об'єкта Object, отримуємо всі ключі paramsObj.
   // За допомогою циклу 'for of' перебираємо всі ключі та додаємо параметри пошуку до urlObj.
   // Повертаємо нову URL-адресу в рядковому форматі.
+  const urlObj = new URL(newUrl);
+
+  const keys = Object.keys(paramsObj);
+  for (const key of keys) {
+    const value = paramsObj[key];
+    urlObj.searchParams.set(key, value);
+  }
+
+  return urlObj.toString();
 }
 
 // Приклад використання функції manipulateSearchParams
@@ -144,6 +197,13 @@ function deleteSearchParams(keys, url) {
   // Створюємо новий об'єкт URL з URL-адреси.
   // За допомогою циклу 'for of' перебираємо всі ключі та видаляємо відповідні параметри пошуку з urlObj.
   // Повертаємо нову URL-адресу в рядковому форматі.
+  const objUrl = new URL(url);
+
+  for (const key of keys) {
+    objUrl.searchParams.delete(key);
+  }
+
+  return objUrl.href;
 }
 
 // Приклад використання функції deleteSearchParams
@@ -170,6 +230,14 @@ function createURLWithParams(params, url) {
   // Створюємо новий об'єкт URL з базової URL-адреси.
   // За допомогою циклу 'for in' перебираємо всі ключі та значення об'єкта params та додаємо їх як параметри пошуку до urlObj.
   // Повертаємо нову URL-адресу в рядковому форматі.
+  const objUrl = new URL(url);
+
+  for (const key in params) {
+    const value = params[key];
+    objUrl.searchParams.append(key, value);
+  }
+
+  return objUrl.href;
 }
 
 // Приклад використання функції createURLWithParams
@@ -196,6 +264,11 @@ function updateURLHash(url, hash) {
   // Створюємо новий об'єкт URL з вхідної URL-адреси.
   // Оновлюємо значення хеша в URL-адресі.
   // Повертаємо нову URL-адресу в рядковому форматі.
+  const objUrl = new URL(url);
+
+  objUrl.hash = hash;
+
+  return objUrl.href;
 }
 
 // Приклад використання функції updateURLHash
@@ -218,6 +291,11 @@ function appendSearchParam(url, key, value) {
   // Створюємо новий об'єкт URL з вхідної URL-адреси.
   // Додаємо новий параметр пошуку до URL-адреси.
   // Повертаємо нову URL-адресу в рядковому форматі.
+  const objUrl = new URL(url);
+
+  objUrl.searchParams.append(key, value);
+
+  return objUrl.href;
 }
 
 // Приклад використання функції appendSearchParam
@@ -236,6 +314,14 @@ console.log(appendSearchParam("https://example.com", "newParam", "newValue"));
  * Повертається - Нова URL-адреса з оновленими параметрами пошуку.
  */
 function modifyURLParameters(url, params) {
+  const objUrl = new URL(url);
+
+  for (const key in params) {
+    const value = params[key];
+    objUrl.searchParams.set(key, value);
+  }
+
+  return objUrl.href;
   // Створюємо новий об'єкт URL з вхідної URL-адреси.
   // Перебираємо словник params за допомогою for in
   // Отримаємо значення словника по ключу
